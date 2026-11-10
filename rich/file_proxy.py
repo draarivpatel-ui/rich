@@ -28,6 +28,7 @@ class FileProxy(io.TextIOBase):
     def write(self, text: str) -> int:
         if not isinstance(text, str):
             raise TypeError(f"write() argument must be str, not {type(text).__name__}")
+        text_length = len(text)
         buffer = self.__buffer
         lines: list[str] = []
         while text:
@@ -45,7 +46,7 @@ class FileProxy(io.TextIOBase):
                     self.__ansi_decoder.decode_line(line) for line in lines
                 )
                 console.print(output)
-        return len(text)
+        return text_length
 
     def flush(self) -> None:
         output = "".join(self.__buffer)

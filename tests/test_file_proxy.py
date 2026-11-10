@@ -52,3 +52,18 @@ def test_isatty():
     console = Console()
     file_proxy = FileProxy(console, file)
     assert file_proxy.isatty()
+
+
+def test_write_returns_character_count():
+    """Test that write() returns the number of characters written.
+
+    Regression test for https://github.com/Textualize/rich/issues/4250
+    """
+    file = io.StringIO()
+    console = Console(file=file, width=40)
+    file_proxy = FileProxy(console, io.StringIO())
+
+    assert file_proxy.write("abc") == 3
+    assert file_proxy.write("hello\n") == 6
+    assert file_proxy.write("a\nb") == 3
+    assert file_proxy.write("") == 0
